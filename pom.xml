@@ -4,17 +4,190 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.2.1.RELEASE</version>
+        <relativePath/>
+    </parent>
+
     <groupId>org.wyx.diego</groupId>
     <artifactId>pontifex-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
+
     <modules>
         <module>pontifex-core</module>
+        <module>pontifex-spring-boot-starter</module>
     </modules>
-
     <properties>
+        <app.name>${project.artifactId}</app.name>
+        <!-- Overrides to parent POM -->
+        <java.version>1.8</java.version>
+
+        <!-- Maven Plugin Settings-->
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <maven.source.skip>true</maven.source.skip>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+
+        <!-- Additions to parent POM -->
+        <spring-cloud.version>Edgware.SR3</spring-cloud.version>
+        <spring-boot-admin.version>1.5.7</spring-boot-admin.version>
+
+        <druid.version>1.1.9</druid.version>
+        <mybatis.version>3.4.6</mybatis.version>
+        <mybatis-spring.version>1.3.2</mybatis-spring.version>
+        <mybatis-generator.version>1.3.6</mybatis-generator.version>
+        <mybatis-spring-boot-starter.version>2.0.0</mybatis-spring-boot-starter.version>
+        <pagehelper-spring.version>1.2.5</pagehelper-spring.version>
+
+        <fastjson.version>1.2.47</fastjson.version>
+        <guava.version>25.0-jre</guava.version>
+
+        <aspectjtools.version>1.9.1</aspectjtools.version>
+
+        <spring-kafka.version>2.1.6.RELEASE</spring-kafka.version>
+        <kafka-clients.version>1.1.0</kafka-clients.version>
+
+        <sharding-jdbc.version>2.0.3</sharding-jdbc.version>
+
+        <jolokia-core.version>1.5.0</jolokia-core.version>
+
+        <yidian-swagger>1.0.0</yidian-swagger>
+
     </properties>
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.wyx.diego</groupId>
+                <artifactId>pontifex-core</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- spring cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-server</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-server-ui</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!-- aspectj -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectjtools.version}</version>
+            </dependency>
+            <!-- log -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.25</version>
+            </dependency>
+
+            <!-- javassist -->
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>3.25.0-GA</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>Public Repositories</name>
+            <url>http://maven.ds.gome.com.cn/nexus/content/groups/public/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <updatePolicy>always</updatePolicy>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>http://maven.ds.gome.com.cn/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>public</id>
+            <name>GM Public Repositories</name>
+            <url>http://maven.ds.gome.com.cn/nexus/content/groups/public/</url>
+        </pluginRepository>
+
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>GM Releases</name>
+            <url>http://maven.ds.gome.com.cn/nexus/content/repositories/releases/</url>
+
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>GM Snapshots</name>
+            <url>http://maven.ds.gome.com.cn/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.wyx.diego.pontifex.spring.SpringAutoConfiguration
