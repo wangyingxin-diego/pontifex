@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-@Repeatable(ComponentSpring.class)
+@Repeatable(ComponentSprings.class)
 @Component
 public @interface ComponentSpring {
 
