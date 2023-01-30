@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 public @interface ComponentMeta {
     String name() default "";
 
-    ComponentLogLevel level() default ComponentLogLevel.SIMPLE;
+    ComponentLogLevel level() default ComponentLogLevel.ALL;
 
     Async async() default @Async(
             isOpen = false
@@ -24,5 +24,9 @@ public @interface ComponentMeta {
 
     RuntimeMeta runtime() default @RuntimeMeta(
             open = false
+    );
+
+    Cache cache() default @Cache(
+         isOpen = false
     );
 }

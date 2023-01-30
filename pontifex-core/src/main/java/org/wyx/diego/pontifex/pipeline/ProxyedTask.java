@@ -21,8 +21,8 @@ public class ProxyedTask extends Task {
     }
 
     @Override
-    public List<String> keyNames() {
-        return this.plTask.keyNames();
+    public int compareTo(PLTask o) {
+        return plTask.compareTo(o);
     }
 
     @Override
@@ -32,5 +32,16 @@ public class ProxyedTask extends Task {
 
     public PLTask getPlTask() {
         return plTask;
+    }
+
+    @Override
+    public int getInnerSort() {
+        return plTask.getInnerSort();
+    }
+
+    @Override
+    public void setInnerSort(int innerSort) {
+        this.plTask.setInnerSort(innerSort);
+        plTask.setInnerSort(innerSort);
     }
 }

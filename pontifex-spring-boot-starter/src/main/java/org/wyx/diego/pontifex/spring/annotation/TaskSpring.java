@@ -19,6 +19,6 @@ import java.lang.annotation.*;
 @Component
 public @interface TaskSpring {
 
-    TaskMeta taskMeta();
+    TaskMeta taskMeta() default @TaskMeta();
 
 }

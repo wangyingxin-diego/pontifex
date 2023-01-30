@@ -6,7 +6,7 @@ package org.wyx.diego.pontifex.loader.handler.invoke;
  * @description
  */
 public class LogTask {
-    private static final String templet = "[%s:%s]";
+    private static final String TEMPLATE = "[%s:%s]";
     private String name;
     private long spend;
 
@@ -32,6 +32,6 @@ public class LogTask {
     }
 
     public String toString() {
-        return String.format("[%s:%s]", this.name, this.spend);
+        return String.format(TEMPLATE, this.name, this.spend);
     }
 }

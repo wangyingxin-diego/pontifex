@@ -5,7 +5,7 @@ package org.wyx.diego.pontifex.component;
  * @time 2015-10-25
  * @description
  */
-public class BaseComponentReq implements ComponentReq {
+public abstract class BaseComponentReq implements ComponentReq {
     private boolean sync = false;
 
     public BaseComponentReq() {
@@ -19,4 +19,5 @@ public class BaseComponentReq implements ComponentReq {
         this.sync = sync;
         return this;
     }
+
 }

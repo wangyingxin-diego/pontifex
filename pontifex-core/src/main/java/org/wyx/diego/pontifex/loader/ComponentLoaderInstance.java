@@ -35,15 +35,15 @@ public enum ComponentLoaderInstance implements Loader<Component, Component>  {
     private static class BaseComponentLoader implements ComponentLoader<Component<?, ?>, Component<?, ?>> {
 
         public Component<?, ?> load(Component<?, ?> component) {
-            ComponentMeta componentMeta = (ComponentMeta)component.getClass().getAnnotation(ComponentMeta.class);
-            if (componentMeta == null) {
+            ComponentMeta componentMeta = component.getClass().getAnnotation(ComponentMeta.class);
+            if(componentMeta == null) {
+                //TODO throw ex
                 return component;
-            } else {
-                ComponentInvocationHandler.ComponentProxy componentProxy = ComponentInvocationHandler.ComponentProxy.build(component);
-                ComponentInvocationHandler componentInvocationHandler = new ComponentInvocationHandler(componentProxy);
-                Component componentP = (Component)NebulaJavassistProxy.getProxy(component.getClass()).newInstance(componentInvocationHandler);
-                return componentP;
             }
+            ComponentInvocationHandler.ComponentProxy componentProxy = ComponentInvocationHandler.ComponentProxy.build(component);
+            ComponentInvocationHandler componentInvocationHandler = new ComponentInvocationHandler(componentProxy);
+            Component componentP = (Component)NebulaJavassistProxy.getProxy(component.getClass()).newInstance(componentInvocationHandler);
+            return componentP;
         }
     }
 

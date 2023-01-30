@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.wyx.diego.pontifex.ModuleType;
 import org.wyx.diego.pontifex.component.ComponentReq;
 import org.wyx.diego.pontifex.loader.runtime.RuntimeObject;
+import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 import org.wyx.diego.pontifex.pipeline.TaskContext;
 import org.wyx.diego.pontifex.util.ThreadLocalUtil;
 
@@ -92,21 +93,25 @@ public class LogInvoker extends AbstractInvoker<LogInvoker.Context> {
         Object[] args = invokerParam.getArgs();
         if (args.length < 1) {
             logger.info("pontifex module Name={} invoke start, param={}", invokerParam.getProxyed().getClass().getSimpleName(), "");
+            return;
+        }
+        TaskRuntimeObject taskRuntimeObject = (TaskRuntimeObject) invokerParam.getRuntimeObject();
+        String pipelineName = taskRuntimeObject.getPipelineName();
+        int sort = taskRuntimeObject.getSort();
+        String name = taskRuntimeObject.getName();
+        Object object = args[0];
+        if (object instanceof TaskContext) {
+            TaskContext taskContext = (TaskContext)object;
+            logger.info("pontifex pipeline={} module Name={} invoke start, request={}, response={}", pipelineName, name, JSONObject.toJSONString(taskContext.getPontifexRequest()), JSONObject.toJSONString(taskContext.getPontifexResponse()));
+        } else if (object instanceof ComponentReq) {
+            ComponentReq componentReq = (ComponentReq)object;
+            logger.info("pontifex pipeline={} module Name={} invoke start, ComponentReq={}", pipelineName, name, JSONObject.toJSONString(componentReq));
         } else {
-            Object object = args[0];
-            if (object instanceof TaskContext) {
-                TaskContext taskContext = (TaskContext)object;
-                logger.info("pontifex module Name={} invoke start, request={}, response={}", new Object[]{invokerParam.getProxyed().getClass().getSimpleName(), JSONObject.toJSONString(taskContext.getPontifexRequest()), JSONObject.toJSONString(taskContext.getPontifexResponse())});
-            } else if (object instanceof ComponentReq) {
-                ComponentReq componentReq = (ComponentReq)object;
-                logger.info("pontifex module Name={} invoke start, ComponentReq={}", invokerParam.getProxyed().getClass().getSimpleName(), JSONObject.toJSONString(componentReq));
-            } else {
-                logger.info("pontifex module Name={} invoke start, param={}", invokerParam.getProxyed().getClass().getSimpleName());
-            }
+            logger.info("pontifex pipeline={} module Name={} invoke start, param={}", pipelineName, invokerParam.getProxyed().getClass().getSimpleName());
         }
     }
 
-    public static class Context {
+    public static class Context extends org.wyx.diego.pontifex.loader.handler.invoke.Context {
         private InvokerParam invokerParam;
         private long startTime;
         private LogTaskContext logTaskContext;

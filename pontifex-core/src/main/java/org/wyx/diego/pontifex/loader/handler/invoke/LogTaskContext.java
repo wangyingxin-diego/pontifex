@@ -11,6 +11,8 @@ import java.util.List;
 public class LogTaskContext {
     private List<LogTask> logTasks = new ArrayList();
 
+    private int totalTime;
+
     public LogTaskContext() {
     }
 
@@ -31,6 +33,14 @@ public class LogTaskContext {
     public LogTaskContext setLogTasks(List<LogTask> logTasks) {
         this.logTasks = logTasks;
         return this;
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(int totalTime) {
+        this.totalTime = totalTime;
     }
 
     public String toString() {

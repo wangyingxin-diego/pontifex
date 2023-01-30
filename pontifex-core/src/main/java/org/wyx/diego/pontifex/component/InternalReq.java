@@ -35,4 +35,9 @@ public class InternalReq<T extends BaseComponentReq> extends BaseComponentReq im
         this.taskContext = taskContext;
         return this;
     }
+
+    @Override
+    public String getKey() {
+        return request.getKey();
+    }
 }

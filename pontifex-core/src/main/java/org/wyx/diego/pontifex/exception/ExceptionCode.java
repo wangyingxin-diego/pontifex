@@ -19,9 +19,12 @@ public enum ExceptionCode {
     EXCEPTION_CODE_TASK(1000, "task exception", ExceptionType.TASK_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
     EXCEPTION_CODE_TASK_ANNO_NULL(1001, "task annotation is null", ExceptionType.TASK_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
     EXCEPTION_CODE_TASK_META(1002, "", ExceptionType.TASK_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
+    EXCEPTION_CODE_TASK_GENERIC_ERROR(1101, "task generic parameter error!", ExceptionType.TASK_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
 
 
-    EXCEPTION_CODE_COMMPONT_GET(10001, "commpont get exception", ExceptionType.COMPONENT_EXCEPTION, ExceptionLevel.EXCEPTION_MUST);
+    EXCEPTION_CODE_COMPONENT_GET(10001, "component get exception", ExceptionType.COMPONENT_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
+    EXCEPTION_CODE_COMPONENT_METHOD_ERROR(11000, "component method inexistence", ExceptionType.COMPONENT_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
+
     ;
 
     private int code;

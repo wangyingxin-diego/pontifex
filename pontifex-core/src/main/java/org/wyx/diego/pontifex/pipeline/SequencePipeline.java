@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_TASK;
+import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_TASK_GENERIC_ERROR;
 
 /**
  * @author diego
@@ -64,20 +65,15 @@ public class SequencePipeline extends AbstractPipeline implements Iterable<PLTas
 
         Iterator<PLTask<?>> iterator = this.iterator();
         Boolean created = new Boolean(false);
-        ArrayList timeList = new ArrayList();
 
         while(iterator.hasNext()) {
             ProxyedTask task = (ProxyedTask)iterator.next();
 
             try {
                 created = analysisParam(created, task, ctx);
-                long start = System.currentTimeMillis();
                 task.run(ctx);
-                long end = System.currentTimeMillis();
-                timeList.add(end - start);
             } catch (Throwable e) {
                 throw e;
-            } finally {
             }
         }
 
@@ -86,46 +82,67 @@ public class SequencePipeline extends AbstractPipeline implements Iterable<PLTas
     }
 
     static Boolean analysisParam(Boolean created, ProxyedTask task, TaskContext ctx) {
-        if (!created) {
-            created = true;
-            ParameterizedType parameterizedType = (ParameterizedType)task.getPlTask().getClass().getSuperclass().getGenericSuperclass();
-            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-            Type payloadType = actualTypeArguments[1];
-            Class payloadClazz = (Class)payloadType;
+
+        if(created) return created;
+        created = true;
+        ParameterizedType parameterizedType = (ParameterizedType)task.getPlTask().getClass().getSuperclass().getGenericSuperclass();
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        Type payloadType = actualTypeArguments[1];
+        Class payloadClazz = (Class)payloadType;
+
+        try {
+            Payload payload = (Payload)payloadClazz.getConstructor().newInstance();
+            ctx.setPayload(payload);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw PontifexRuntimeException.exception(EXCEPTION_CODE_TASK_GENERIC_ERROR);
+        }
+
+        Type actualTypeArgument = actualTypeArguments[actualTypeArguments.length - 1];
+        if (actualTypeArgument instanceof Class) {
+            Class clazz = (Class)actualTypeArgument;
 
             try {
-                Payload payload = (Payload)payloadClazz.getConstructor().newInstance();
-                ctx.setPayload(payload);
-            } catch (Exception var11) {
-                var11.printStackTrace();
+                Response response = (Response)clazz.getConstructor().newInstance();
+                ctx.putPontifexResult(response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw PontifexRuntimeException.exception(EXCEPTION_CODE_TASK_GENERIC_ERROR);
             }
-
-            Type actualTypeArgument = actualTypeArguments[actualTypeArguments.length - 1];
-            if (actualTypeArgument instanceof Class) {
-                Class clazz = (Class)actualTypeArgument;
-
-                try {
-                    Response response = (Response)clazz.getConstructor().newInstance();
-                    ctx.putPontifexResult(response);
-                } catch (Exception var10) {
-                    var10.printStackTrace();
-                }
-            } else if (actualTypeArgument instanceof ParameterizedType) {
-                ParameterizedType parameterizedTypeT = (ParameterizedType)actualTypeArgument;
-                if (parameterizedTypeT.getRawType() == ListRes.class) {
-                    ListRes<?> listRes = new ListRes();
-                    ctx.putPontifexResult(listRes);
-                } else {
-                    MapRes<?, ?> mapRes = new MapRes();
-                    ctx.putPontifexResult(mapRes);
-                }
+        } else if (actualTypeArgument instanceof ParameterizedType) {
+            ParameterizedType parameterizedTypeT = (ParameterizedType)actualTypeArgument;
+            if (parameterizedTypeT.getRawType() == ListRes.class) {
+                ListRes<?> listRes = new ListRes();
+                ctx.putPontifexResult(listRes);
+            } else {
+                MapRes<?, ?> mapRes = new MapRes();
+                ctx.putPontifexResult(mapRes);
             }
         }
 
         return created;
     }
 
+    @Override
+    public int taskSize() {
+        return posts.size();
+    }
 
+
+    @Override
+    public int taskIndex(String taskName) {
+        if(taskName == null || "".equals(taskName.trim())) throw PontifexRuntimeException.exception(EXCEPTION_CODE_TASK);
+        int index = 0;
+        for(PLTask plTask : posts) {
+
+            if(plTask.name().equals(taskName) ) {
+                return index;
+            }
+            index++;
+
+        }
+        return index;
+    }
 }
 
 

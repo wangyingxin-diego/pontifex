@@ -7,4 +7,6 @@ package org.wyx.diego.pontifex.component;
  */
 public interface ComponentReq {
 
+    String getKey();
+
 }

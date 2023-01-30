@@ -16,6 +16,8 @@ import org.wyx.diego.pontifex.loader.runtime.RuntimeObject;
 import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 import org.wyx.diego.pontifex.pipeline.*;
 
+import java.util.Iterator;
+
 import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_PL_TYPE;
 
 /**
@@ -66,11 +68,14 @@ public enum SequencePipelineHolderInstance implements PipelineHolder {
 
             for(TaskMeta taskMeta : taskMetas) {
 
-                TaskRuntimeObject runtimeObject = new TaskRuntimeObject(taskMeta, task);
+                Pipeline pipeline = pipelines.get(taskMeta.pipelineName());
+                int sort = pipeline==null?0:pipeline.taskIndex(taskMeta.name());
+                TaskRuntimeObject runtimeObject = new TaskRuntimeObject(taskMeta, task, sort);
                 TaskInvocationHandler taskInvocationHandler = new TaskInvocationHandler(task, runtimeObject);
                 PLTask nebulaJavassistProxy = (PLTask) NebulaJavassistProxy.getProxy(task.getClass()).newInstance(taskInvocationHandler);
                 TaskParam taskParam = new TaskParam();
-                taskParam.setTask(nebulaJavassistProxy).setTaskMeta(taskMeta);
+                ProxyedTask proxyedTask = new ProxyedTask(nebulaJavassistProxy);
+                taskParam.setTask(proxyedTask).setTaskMeta(taskMeta);
                 load0(taskParam);
 
             }
@@ -84,24 +89,31 @@ public enum SequencePipelineHolderInstance implements PipelineHolder {
             TaskMeta taskMeta = taskParam.getTaskMeta();
             try {
 
-                logger.error("DefaultPontifexManager, task={}", JSONObject.toJSONString(taskMeta));
+                logger.info("DefaultPontifexManager, task={}", JSONObject.toJSONString(taskMeta));
 
                 String pipelineName = taskMeta.pipelineName();
 
-                logger.error("DefaultPontifexManager, pipelineName={}", pipelineName);
+                logger.info("DefaultPontifexManager, pipelineName={}", pipelineName);
                 if("".equals(pipelineName)) return null;
-                ProxyedTask proxyedTask = new ProxyedTask(task);
                 int sort = taskMeta.sort();
-                proxyedTask.setSort(sort);
-                proxyedTask.setTaskType(TaskType.SEQUENCE);
+                task.setSort(sort);
+                task.setTaskType(TaskType.SEQUENCE);
+                task.setName(taskMeta.name());
                 Pipeline pipeline =new SequencePipeline();
                 Pipeline pipelined = pipelines.putIfAbsent(pipelineName, pipeline);
                 if(pipelined != null && !(pipelined instanceof SequencePipeline)) {
                     throw PontifexRuntimeException.exception(EXCEPTION_CODE_PL_TYPE);
                 }
-                pipelines.get(pipelineName).addTask(proxyedTask);
-                System.out.println("DefaultPontifexManager:" + pipelines.toString());
-                return proxyedTask;
+                pipelined = pipelines.get(pipelineName);
+                pipelined.addTask(task);
+                Iterator<PLTask<?>> iterator = pipelined.iterator();
+                int i = 0;
+                while (iterator.hasNext()) {
+                    PLTask<?> plTask = iterator.next();
+                    plTask.setInnerSort(i++);
+                }
+//                logger.info("DefaultPontifexManager, pipeline={}", );
+                return task;
 
             } catch (Exception e) {
                 throw new PontifexRuntimeException(111, "", e);

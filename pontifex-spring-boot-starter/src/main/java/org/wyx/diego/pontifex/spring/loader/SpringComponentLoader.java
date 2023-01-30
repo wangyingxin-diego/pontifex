@@ -12,7 +12,7 @@ import org.wyx.diego.pontifex.loader.ComponentLoaderInstance;
  * @description: TODO
  * @date 2015/12/29
  */
-@Component
+//@Component
 public class SpringComponentLoader implements BeanPostProcessor {
 
     @Override

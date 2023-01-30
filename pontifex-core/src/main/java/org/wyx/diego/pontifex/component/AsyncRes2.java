@@ -81,7 +81,7 @@ public class AsyncRes2<R1, R2> extends Res2<R1, R2> {
         }
 
         if (exception != null) {
-            throw new PontifexRuntimeException(ExceptionCode.EXCEPTION_CODE_COMMPONT_GET);
+            throw new PontifexRuntimeException(ExceptionCode.EXCEPTION_CODE_COMPONENT_GET);
         } else {
             return res;
         }

@@ -24,7 +24,7 @@ public interface Component<P extends ComponentReq, R1 extends ComponentRes> {
         return res;
     }
 
-    public static enum MethodName {
+    enum MethodName {
         CALL("call"),
         APPLY("apply");
 

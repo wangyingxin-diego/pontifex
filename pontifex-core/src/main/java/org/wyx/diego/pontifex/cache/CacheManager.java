@@ -4,7 +4,9 @@ import org.wyx.diego.pontifex.annotation.Cache;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author wangyingxin
@@ -27,10 +29,17 @@ public class CacheManager {
     private CacheHolder genBaseCacheHolder(Cache cache) {
         CacheBean cacheBean = new CacheBean(cache);
         List<Target> targets = cacheBean.getTargets();
+        Set<Target> targetSet = targets.stream().collect(Collectors.toSet());
+
+        for (Target target : Target.values()) {
+            if (targetSet.contains(target)) {
+
+            }
+        }
         Iterator var4 = targets.iterator();
         if (var4.hasNext()) {
-            Target target = (Target)var4.next();
-            switch(target) {
+            Target target = (Target) var4.next();
+            switch (target) {
                 case Memory:
                 case Redis:
                 default:
@@ -41,8 +50,8 @@ public class CacheManager {
         }
     }
 
-    private GuavaCacheHolder getMemeryHolder(CacheBean cacheBean) {
-        new GuavaCacheHolder(cacheBean);
+    private GuavaCacheHolder getMemoryHolder(CacheBean cacheBean) {
+//        new GuavaCacheHolder(cacheBean);
         return null;
     }
 

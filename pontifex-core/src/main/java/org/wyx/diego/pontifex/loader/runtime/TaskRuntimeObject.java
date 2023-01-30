@@ -21,7 +21,9 @@ public class TaskRuntimeObject extends RuntimeObject {
     private final TaskLogLevel taskLogLevel;
     private final int sort;
 
-    public TaskRuntimeObject(TaskMeta taskMeta, PLTask plTask) {
+    private final int innerSort;
+
+    public TaskRuntimeObject(TaskMeta taskMeta, PLTask plTask, int innerSort) {
         super(taskMeta.runtime(), ModuleType.MODULE_TYPE_TASK);
         String name = taskMeta.name();
         if (name == null || "".equals(name.trim())) {
@@ -34,6 +36,7 @@ public class TaskRuntimeObject extends RuntimeObject {
             this.pipelineName = taskMeta.pipelineName().trim();
             this.taskLogLevel = taskMeta.level();
             this.sort = taskMeta.sort();
+            this.innerSort = innerSort;
         } else {
             throw new PontifexRuntimeException(ExceptionCode.EXCEPTION_CODE_PL_NAME_NULL);
         }
@@ -55,4 +58,7 @@ public class TaskRuntimeObject extends RuntimeObject {
         return this.sort;
     }
 
+    public int getInnerSort() {
+        return innerSort;
+    }
 }

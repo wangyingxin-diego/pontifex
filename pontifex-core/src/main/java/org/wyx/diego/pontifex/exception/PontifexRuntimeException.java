@@ -80,8 +80,24 @@ public class PontifexRuntimeException extends RuntimeException {
         this.exceptionLevel = ExceptionLevel.EXCEPTION_DEFAULT_VALUE;
     }
 
+    public PontifexRuntimeException(ExceptionMsg exceptionMsg) {
+        this.errorCode = exceptionMsg.getCode();
+        this.debugMsg = null;
+        this.userMsg = exceptionMsg.getMsg();
+        this.exceptionType = exceptionMsg.getExceptionType();
+        this.exceptionLevel = exceptionMsg.getExceptionLevel();
+    }
+
     public static PontifexRuntimeException exception(ExceptionCode exceptionCode) {
         return new PontifexRuntimeException(exceptionCode);
+    }
+
+    protected static PontifexRuntimeException exception(ExceptionMsg exceptionMsg) {
+        return new PontifexRuntimeException(exceptionMsg);
+    }
+
+    public static PontifexRuntimeException exception(BusinessException businessException) {
+        return new PontifexRuntimeException(new ExceptionMsg(businessException));
     }
 
     static {

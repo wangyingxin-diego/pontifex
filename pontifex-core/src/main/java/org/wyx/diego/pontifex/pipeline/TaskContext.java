@@ -4,6 +4,7 @@ package org.wyx.diego.pontifex.pipeline;
 import org.wyx.diego.pontifex.Request;
 import org.wyx.diego.pontifex.Response;
 import org.wyx.diego.pontifex.loader.handler.invoke.LogTaskContext;
+import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 
 /**
  * @author diego
@@ -15,6 +16,8 @@ public class TaskContext<Req extends Request, PPayload extends Payload, Res exte
     private LogTaskContext logTaskContext;
 
     private LogTaskContext logTaskContext4Component;
+
+    private TaskRuntimeObject taskRuntimeObject;
 
     public LogTaskContext getLogTaskContext() {
         return this.logTaskContext;
@@ -31,6 +34,15 @@ public class TaskContext<Req extends Request, PPayload extends Payload, Res exte
 
     public TaskContext<Req, PPayload, Res> setLogTaskContext4Component(LogTaskContext logTaskContext4Component) {
         this.logTaskContext4Component = logTaskContext4Component;
+        return this;
+    }
+
+    public TaskRuntimeObject getTaskRuntimeObject() {
+        return taskRuntimeObject;
+    }
+
+    public TaskContext<Req, PPayload, Res> setTaskRuntimeObject(TaskRuntimeObject taskRuntimeObject) {
+        this.taskRuntimeObject = taskRuntimeObject;
         return this;
     }
 }

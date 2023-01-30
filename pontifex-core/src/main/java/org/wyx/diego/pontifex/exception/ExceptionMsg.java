@@ -7,22 +7,34 @@ package org.wyx.diego.pontifex.exception;
  * @description: TODO
  * @date 2016/1/1
  */
-public class ExceptionMsg {
+class ExceptionMsg {
     private final int code;
     private final String msg;
-    private final ExceptionType exceptionType;
+    private final ExceptionType exceptionType = ExceptionType.BUSINESS_EXCEPTION;
     private final ExceptionLevel exceptionLevel;
 
     public ExceptionMsg(int code, String msg) {
-        this.exceptionType = ExceptionType.BUSINESS_EXCEPTION;
         this.exceptionLevel = ExceptionLevel.EXCEPTION_MUST;
         this.code = code;
         this.msg = msg;
     }
 
+    public ExceptionMsg(int code, String msg, ExceptionLevel exceptionLevel) {
+        if(exceptionLevel != null) {
+            this.exceptionLevel = exceptionLevel;
+        } else {
+            this.exceptionLevel = ExceptionLevel.EXCEPTION_MUST;
+        }
+        this.code = code;
+        this.msg = msg;
+    }
+
     public ExceptionMsg(BusinessException businessException) {
-        this.exceptionType = ExceptionType.BUSINESS_EXCEPTION;
-        this.exceptionLevel = ExceptionLevel.EXCEPTION_MUST;
+        if(businessException.getExceptionLevel() == null) {
+            this.exceptionLevel = ExceptionLevel.EXCEPTION_MUST;
+        } else {
+            this.exceptionLevel = businessException.getExceptionLevel();
+        }
         int code = businessException.getCode();
         this.msg = businessException.getMsg();
         if (code < 0) {
@@ -30,8 +42,24 @@ public class ExceptionMsg {
         } else {
             this.code = code;
         }
-
     }
+
+    public ExceptionMsg(BusinessException businessException, ExceptionLevel exceptionLevel) {
+        if(exceptionLevel != null) {
+            this.exceptionLevel = exceptionLevel;
+        } else {
+            this.exceptionLevel = ExceptionLevel.EXCEPTION_MUST;
+        }
+        int code = businessException.getCode();
+        this.msg = businessException.getMsg();
+        if (code < 0) {
+            this.code = ExceptionCode.EXCEPTION_CODE_BUSINESS_ERROR.getCode();
+        } else {
+            this.code = code;
+        }
+    }
+
+
 
     public int getCode() {
         return this.code;

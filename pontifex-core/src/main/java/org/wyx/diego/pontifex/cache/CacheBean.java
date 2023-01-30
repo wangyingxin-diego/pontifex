@@ -1,11 +1,9 @@
 package org.wyx.diego.pontifex.cache;
 
+import com.sun.javafx.collections.UnmodifiableListSet;
 import org.wyx.diego.pontifex.annotation.Cache;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author wangyingxin
@@ -21,12 +19,15 @@ public class CacheBean {
     private long timeout;
     private long maximumSize;
 
+    private Set<Target> targetSet;
+
     public CacheBean(Cache cache) {
         this.open = cache.isOpen();
         this.timeout = cache.timeout();
         this.maximumSize = cache.maximumSize();
         Arrays.sort(cache.target());
         Collections.addAll(this.targets, cache.target());
+        targetSet = new UnmodifiableListSet<>(targets);
     }
 
     public boolean isOpen() {
@@ -65,4 +66,7 @@ public class CacheBean {
         return this;
     }
 
+    public Set<Target> getTargetSet() {
+        return targetSet;
+    }
 }

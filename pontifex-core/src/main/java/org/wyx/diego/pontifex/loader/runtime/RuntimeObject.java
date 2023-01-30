@@ -4,6 +4,7 @@ package org.wyx.diego.pontifex.loader.runtime;
 import org.wyx.diego.pontifex.ModuleType;
 import org.wyx.diego.pontifex.annotation.Alarm;
 import org.wyx.diego.pontifex.annotation.RuntimeMeta;
+import org.wyx.diego.pontifex.cache.CacheBean;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,8 @@ public abstract class RuntimeObject {
     protected boolean open;
     protected long timeout;
     protected List<Alarm> alarms;
+
+    protected CacheBean cacheBean;
 
     protected RuntimeObject() {
     }
@@ -47,6 +50,11 @@ public abstract class RuntimeObject {
         return Arrays.asList(alarms);
     }
 
+    protected CacheBean analysisCache(org.wyx.diego.pontifex.annotation.Cache cache) {
+        this.cacheBean = new CacheBean(cache);
+        return this.cacheBean;
+    }
+
     public ModuleType getModuleType() {
         return this.moduleType;
     }
@@ -61,5 +69,29 @@ public abstract class RuntimeObject {
 
     public List<Alarm> getAlarms() {
         return this.alarms;
+    }
+
+    public void setModuleType(ModuleType moduleType) {
+        this.moduleType = moduleType;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
+    }
+
+    public void setAlarms(List<Alarm> alarms) {
+        this.alarms = alarms;
+    }
+
+    public CacheBean getCache() {
+        return cacheBean;
+    }
+
+    public void setCache(CacheBean cacheBean) {
+        this.cacheBean = cacheBean;
     }
 }

@@ -24,7 +24,7 @@ abstract class AbstractInvocationHandler<P, Runtime extends RuntimeObject> imple
     protected AbstractInvocationHandler(Runtime runtime, Invoker invoker, P proxyed) {
         this.runtimeObject = runtime;
         this.proxyed = proxyed;
-        this.invoker = new LogInvoker(invoker);
+        this.invoker = invoker;
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

@@ -16,11 +16,23 @@ public abstract class PLTask<T extends PLContext> implements Comparable<PLTask<?
 
     private int sort;
 
+    private int innerSort;
+
     private TaskType TaskType;
+
+    private String name;
+
+//    public PLTask(int sort, org.wyx.diego.pontifex.pipeline.TaskType taskType, String name) {
+//        this.sort = sort;
+//        TaskType = taskType;
+//        this.name = name;
+//    }
 
     public abstract void run(T ctx);
 
-    public abstract List<String> keyNames();
+    public final String name() {
+        return name;
+    };
 
     public abstract int getType();
 
@@ -50,6 +62,22 @@ public abstract class PLTask<T extends PLContext> implements Comparable<PLTask<?
 
     public void setTaskType(org.wyx.diego.pontifex.pipeline.TaskType taskType) {
         TaskType = taskType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getInnerSort() {
+        return innerSort;
+    }
+
+    public void setInnerSort(int innerSort) {
+        this.innerSort = innerSort;
     }
 
     public int compareTo(PLTask o) {

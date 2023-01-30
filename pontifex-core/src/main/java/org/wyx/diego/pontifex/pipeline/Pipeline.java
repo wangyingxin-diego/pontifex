@@ -33,4 +33,10 @@ public interface Pipeline {
     void run(TaskContext ctx);
     Pipeline addTask(PLTask<?> task);
 
+    int taskSize();
+
+    int taskIndex(String taskName);
+
+    Iterator<PLTask<?>> iterator();
+
 }

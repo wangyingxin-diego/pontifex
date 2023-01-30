@@ -58,7 +58,7 @@ public enum DefaultPontifexManagerInstance implements IPontifexManager {
                     pontifexResponse.setReason(ExceptionCode.EXCEPTION_CODE_BUSINESS_ERROR.getMsg());
                 }
 
-                logger.error("pontifex.tast.error", e);
+                logger.error("pontifex.task.error, code={}, reason={}", pontifexResponse.getCode(), pontifexResponse.getReason(), e);
             }
 
             return pontifexResponse;

@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wyx.diego.pontifex.Component;
 import org.wyx.diego.pontifex.component.*;
+import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
+import org.wyx.diego.pontifex.loader.handler.invoke.ComponentLogInvoker;
 import org.wyx.diego.pontifex.loader.handler.invoke.Invoker;
 import org.wyx.diego.pontifex.loader.handler.invoke.InvokerContext;
 import org.wyx.diego.pontifex.loader.handler.invoke.InvokerParam;
@@ -21,6 +23,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
+import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_COMPONENT_METHOD_ERROR;
+
 /**
  * @author diego
  * @time 2015-10-15
@@ -31,16 +35,13 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
     private static final Map<Method, Component.MethodName> methodNameMap = new ConcurrentHashMap();
 
     public ComponentInvocationHandler(ComponentInvocationHandler.ComponentProxy componentProxy) {
-        super(componentProxy.componentRuntimeObject, componentProxy.asyncComponentInvoker, componentProxy.component);
+        super(componentProxy.componentRuntimeObject, new ComponentLogInvoker(componentProxy.asyncComponentInvoker), componentProxy.component);
     }
 
     static {
-        Method[] methods = Component.class.getDeclaredMethods();
-        Method[] var2 = methods;
-        int var3 = methods.length;
 
-        for(int var4 = 0; var4 < var3; ++var4) {
-            Method method = var2[var4];
+        Method[] methods = Component.class.getDeclaredMethods();
+        for(Method method : methods) {
             String methodName = method.getName();
             Component.MethodName name = Component.MethodName.getByMethodName(methodName);
             if (name != null) {
@@ -57,8 +58,8 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
 
         public AsyncComponentInvoker(Component proxyed, ComponentRuntimeObject componentRuntimeObject) {
             super(proxyed);
-            String name = proxyed.getClass().getSimpleName();
             this.componentRuntimeObject = componentRuntimeObject;
+            String name = this.componentRuntimeObject.getName();
             Async async = this.componentRuntimeObject.getAsync();
             short concurrency = async.getConcurrency();
             this.executorService = Executors.newFixedThreadPool(concurrency, new ComponentInvocationHandler.AsyncComponentInvoker.ComponentThreadFactory(name));
@@ -80,8 +81,8 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
                     Res1 object;
                     try {
                         object = this.proxyed.call(internalReq.getRequest());
-                    } catch (Exception var7) {
-                        throw var7;
+                    } catch (Exception e) {
+                        throw e;
                     } finally {
                         ThreadLocalUtil.remove();
                     }
@@ -91,9 +92,8 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
                 List<CompletableFuture> completableFutures = new ArrayList();
                 completableFutures.add(completableFuture);
                 return completableFutures;
-            } else {
-                return super.handleCall(method, internalReq, args);
             }
+            return super.handleCall(method, internalReq, args);
         }
 
         List<CompletableFuture> handleApply(Method method, InternalReq internalReq, Object[] args) {
@@ -179,13 +179,12 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
         public static ComponentInvocationHandler.ComponentProxy build(Component component) {
             if (component == null) {
                 throw new NullPointerException();
-            } else {
-                ComponentInvocationHandler.ComponentProxy componentProxy = new ComponentInvocationHandler.ComponentProxy();
-                componentProxy.component = component;
-                componentProxy.componentRuntimeObject = new ComponentRuntimeObject(component);
-                componentProxy.asyncComponentInvoker = new ComponentInvocationHandler.AsyncComponentInvoker(component, componentProxy.componentRuntimeObject);
-                return componentProxy;
             }
+            ComponentInvocationHandler.ComponentProxy componentProxy = new ComponentInvocationHandler.ComponentProxy();
+            componentProxy.component = component;
+            componentProxy.componentRuntimeObject = new ComponentRuntimeObject(component);
+            componentProxy.asyncComponentInvoker = new ComponentInvocationHandler.AsyncComponentInvoker(component, componentProxy.componentRuntimeObject);
+            return componentProxy;
         }
     }
 
@@ -196,9 +195,9 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
             this.proxyed = proxyed;
         }
 
-        abstract List<CompletableFuture> handleCall(Method var1, InternalReq var2, Object[] var3);
+        abstract List<CompletableFuture> handleCall(Method method, InternalReq internalReq, Object[] objects);
 
-        abstract List<CompletableFuture> handleApply(Method var1, InternalReq var2, Object[] var3);
+        abstract List<CompletableFuture> handleApply(Method method, InternalReq internalReq, Object[] objects);
 
         public InvokerParam before(InvokerParam invokerParam) {
             return invokerParam;
@@ -209,36 +208,35 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
             Method method = invokerParam.getMethod();
             Object proxy = invokerParam.getProxy();
             Object[] args = invokerParam.getArgs();
-            Component.MethodName methodName = (Component.MethodName)ComponentInvocationHandler.methodNameMap.get(method);
+            Component.MethodName methodName = ComponentInvocationHandler.methodNameMap.get(method);
             if (methodName == null) {
                 try {
                     return method.invoke(this.proxyed, args);
-                } catch (IllegalAccessException var10) {
-                    throw new RuntimeException(var10);
-                } catch (InvocationTargetException var11) {
-                    throw new RuntimeException(var11);
+                } catch (IllegalAccessException illegalAccessException) {
+                    throw new RuntimeException(illegalAccessException);
+                } catch (InvocationTargetException invocationTargetException) {
+                    throw new RuntimeException(invocationTargetException);
                 }
-            } else {
-                BaseComponentReq baseComponentReq = (BaseComponentReq)args[0];
-                InternalReq internalReq = new InternalReq();
-                internalReq.setRequest(baseComponentReq).setSync(baseComponentReq.isSync());
-                internalReq.setTaskContext(ThreadLocalUtil.get());
-                List completableFutures;
-                switch(methodName) {
-                    case CALL:
-                        completableFutures = this.handleCall(method, internalReq, args);
-                        break;
-                    case APPLY:
-                        completableFutures = this.handleApply(method, internalReq, args);
-                        break;
-                    default:
-                        throw new RuntimeException();
-                }
-
-                this.after(invokerParam);
-                Res1 res = new AsyncRes2(completableFutures);
-                return res;
             }
+            BaseComponentReq baseComponentReq = (BaseComponentReq)args[0];
+            InternalReq internalReq = new InternalReq();
+            internalReq.setRequest(baseComponentReq).setSync(baseComponentReq.isSync());
+            internalReq.setTaskContext(ThreadLocalUtil.get());
+            List completableFutures;
+            switch(methodName) {
+                case CALL:
+                    completableFutures = this.handleCall(method, internalReq, args);
+                    break;
+                case APPLY:
+                    completableFutures = this.handleApply(method, internalReq, args);
+                    break;
+                default:
+                    throw PontifexRuntimeException.exception(EXCEPTION_CODE_COMPONENT_METHOD_ERROR);
+            }
+
+            this.after(invokerParam);
+            Res1 res = new AsyncRes2(completableFutures);
+            return res;
         }
 
         public void after(InvokerParam o) {

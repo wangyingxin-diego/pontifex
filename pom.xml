@@ -4,22 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.1.RELEASE</version>
-        <relativePath/>
-    </parent>
-
     <groupId>org.wyx.diego</groupId>
     <artifactId>pontifex-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-
+    <version>1.0.1-SNAPSHOT</version>
 
     <modules>
         <module>pontifex-core</module>
         <module>pontifex-spring-boot-starter</module>
+        <module>pontifex-monitor</module>
+        <module>pontifex-demo</module>
     </modules>
     <properties>
         <app.name>${project.artifactId}</app.name>
@@ -64,7 +58,12 @@
             <dependency>
                 <groupId>org.wyx.diego</groupId>
                 <artifactId>pontifex-core</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wyx.diego</groupId>
+                <artifactId>pontifex-spring-boot-starter</artifactId>
+                <version>1.0.1-SNAPSHOT</version>
             </dependency>
 
             <!-- spring cloud -->
@@ -142,52 +141,37 @@
                 <version>3.25.0-GA</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>3.1.2</version>
+            </dependency>
+
+
         </dependencies>
 
     </dependencyManagement>
 
     <repositories>
         <repository>
-            <id>public</id>
-            <name>Public Repositories</name>
-            <url>http://maven.ds.gome.com.cn/nexus/content/groups/public/</url>
-            <snapshots>
-                <updatePolicy>always</updatePolicy>
-                <enabled>true</enabled>
-            </snapshots>
+            <id>nexus</id>
+            <url>https://maven.alimayun.com/nexus/content/groups/public</url>
             <releases>
-                <updatePolicy>always</updatePolicy>
-                <enabled>true</enabled>
             </releases>
-        </repository>
-        <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>http://maven.ds.gome.com.cn/nexus/content/groups/public/</url>
+            <snapshots>
+            </snapshots>
         </repository>
     </repositories>
-
     <pluginRepositories>
         <pluginRepository>
-            <id>public</id>
-            <name>GM Public Repositories</name>
-            <url>http://maven.ds.gome.com.cn/nexus/content/groups/public/</url>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </pluginRepository>
-
     </pluginRepositories>
-
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>GM Releases</name>
-            <url>http://maven.ds.gome.com.cn/nexus/content/repositories/releases/</url>
-
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>GM Snapshots</name>
-            <url>http://maven.ds.gome.com.cn/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
