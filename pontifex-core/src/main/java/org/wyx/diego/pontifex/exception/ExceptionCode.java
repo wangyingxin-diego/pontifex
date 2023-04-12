@@ -25,6 +25,10 @@ public enum ExceptionCode {
     EXCEPTION_CODE_COMPONENT_GET(10001, "component get exception", ExceptionType.COMPONENT_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
     EXCEPTION_CODE_COMPONENT_METHOD_ERROR(11000, "component method inexistence", ExceptionType.COMPONENT_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
 
+    EXCEPTION_CODE_PARAM_ENCRYPTION_ERROR(90001, "param encryt error", ExceptionType.BUSINESS_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
+
+    EXCEPTION_CODE_PARAM_ENCRYPTION_VALUE_ERROR(90002, "param encryt value is null", ExceptionType.BUSINESS_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
+
     ;
 
     private int code;

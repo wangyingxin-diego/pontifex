@@ -3,8 +3,6 @@ package org.wyx.diego.pontifex.holder;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wyx.diego.pontifex.Holder;
-import org.wyx.diego.pontifex.ModuleType;
 import org.wyx.diego.pontifex.PontifexRequest;
 import org.wyx.diego.pontifex.annotation.RuntimeMeta;
 import org.wyx.diego.pontifex.annotation.TaskMeta;
@@ -12,7 +10,6 @@ import org.wyx.diego.pontifex.bytecode.NebulaJavassistProxy;
 import org.wyx.diego.pontifex.exception.ExceptionCode;
 import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
 import org.wyx.diego.pontifex.loader.handler.TaskInvocationHandler;
-import org.wyx.diego.pontifex.loader.runtime.RuntimeObject;
 import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 import org.wyx.diego.pontifex.pipeline.*;
 

@@ -100,6 +100,10 @@ public class PontifexRuntimeException extends RuntimeException {
         return new PontifexRuntimeException(new ExceptionMsg(businessException));
     }
 
+    public static PontifexRuntimeException exception(int errorCode, String userMsg) {
+        return new PontifexRuntimeException(errorCode, userMsg);
+    }
+
     static {
         DEFAULT_VALUE_EXCEPTION = new PontifexRuntimeException(ExceptionCode.EXCEPTION_CODE_DEFAULT_VALUE);
     }

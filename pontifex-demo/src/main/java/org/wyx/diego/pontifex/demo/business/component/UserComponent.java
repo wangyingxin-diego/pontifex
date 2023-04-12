@@ -3,15 +3,15 @@ package org.wyx.diego.pontifex.demo.business.component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.wyx.diego.pontifex.annotation.Cache;
 import org.wyx.diego.pontifex.annotation.ComponentMeta;
-import org.wyx.diego.pontifex.component.BaseComponent;
-import org.wyx.diego.pontifex.component.BaseComponentReq;
-import org.wyx.diego.pontifex.component.BaseComponentRes;
-import org.wyx.diego.pontifex.component.Res1;
+import org.wyx.diego.pontifex.cache.DefaultGetKey;
+import org.wyx.diego.pontifex.component.*;
+import org.wyx.diego.pontifex.demo.business.exception.MyPontifexException;
 import org.wyx.diego.pontifex.log.ComponentLogLevel;
 
 @Component
-@ComponentMeta(name = "UserComponent", level = ComponentLogLevel.ALL)
+@ComponentMeta(name = "UserComponent", level = ComponentLogLevel.ALL, cache = @Cache(getKey = DefaultGetKey.DEFAULT_GET_KEY))
 public class UserComponent extends BaseComponent<UserComponent.UserComponentReq, UserComponent.UserComponentRes> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserComponent.class);
@@ -27,10 +27,18 @@ public class UserComponent extends BaseComponent<UserComponent.UserComponentReq,
 
         UserComponentRes userComponentRes = new UserComponentRes();
         userComponentRes.setUserId(userId).setUserName(userName).setPhone("19898989898").setAddress("beijing");
+        get(userId);
 
         Res1<UserComponentRes> resRes1 = new Res1<>(userComponentRes);
 
         return resRes1;
+    }
+
+    private void get(long userId) {
+
+        if(userId == 123) {
+            throwException(new MyPontifexException());
+        }
     }
 
     public static class UserComponentReq extends BaseComponentReq {
@@ -64,7 +72,7 @@ public class UserComponent extends BaseComponent<UserComponent.UserComponentReq,
         }
     }
 
-    public static class UserComponentRes extends BaseComponentRes {
+    public static class UserComponentRes {
 
         private long userId;
 

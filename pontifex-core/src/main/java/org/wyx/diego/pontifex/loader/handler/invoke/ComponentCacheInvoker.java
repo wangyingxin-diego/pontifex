@@ -3,7 +3,6 @@ package org.wyx.diego.pontifex.loader.handler.invoke;
 import org.wyx.diego.pontifex.cache.CacheBean;
 import org.wyx.diego.pontifex.cache.Target;
 import org.wyx.diego.pontifex.component.ComponentReq;
-import org.wyx.diego.pontifex.loader.runtime.Cache;
 import org.wyx.diego.pontifex.loader.runtime.ComponentRuntimeObject;
 
 import java.util.List;

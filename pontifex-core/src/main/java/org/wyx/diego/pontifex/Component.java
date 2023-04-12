@@ -2,7 +2,6 @@ package org.wyx.diego.pontifex;
 
 
 import org.wyx.diego.pontifex.component.ComponentReq;
-import org.wyx.diego.pontifex.component.ComponentRes;
 import org.wyx.diego.pontifex.component.Res1;
 import org.wyx.diego.pontifex.component.Res2;
 
@@ -13,7 +12,7 @@ import java.util.function.Function;
  * @time 2015-07-16
  * @description
  */
-public interface Component<P extends ComponentReq, R1 extends ComponentRes> {
+public interface Component<P extends ComponentReq, R1> {
     Res1<R1> call(P req);
 
     default <R2> Res2<R1, R2> apply(P req, Function<R1, R2> function) {

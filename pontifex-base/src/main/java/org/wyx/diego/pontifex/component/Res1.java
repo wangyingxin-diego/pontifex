@@ -26,4 +26,8 @@ public class Res1<R1> implements Serializable {
         return this.r1;
     }
 
+    public static <R1> Res1<R1> of(R1 r1) {
+        return new Res1<>(r1);
+    }
+
 }

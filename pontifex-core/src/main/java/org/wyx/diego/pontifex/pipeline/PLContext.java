@@ -77,6 +77,11 @@ public class PLContext<Req extends Request, PPayload extends Payload, Res extend
         return this;
     }
 
+    public Req getBizObject() {
+        if(this.getPontifexRequest() == null) return null;
+        return this.getPontifexRequest().getBizObject();
+    }
+
     public PPayload getPayload() {
         return this.payload;
     }

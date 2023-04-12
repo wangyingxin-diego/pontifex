@@ -13,4 +13,10 @@ public abstract class Task<Req extends Request, PPayload extends Payload, Res ex
 //    public Task(int sort, org.wyx.diego.pontifex.pipeline.TaskType taskType, String name) {
 //        super(sort, taskType, name);
 //    }
+
+
+    @Override
+    public int getType() {
+        return 0;
+    }
 }

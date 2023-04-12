@@ -215,6 +215,11 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
                 } catch (IllegalAccessException illegalAccessException) {
                     throw new RuntimeException(illegalAccessException);
                 } catch (InvocationTargetException invocationTargetException) {
+                    Throwable throwable = invocationTargetException.getTargetException();
+                    if(throwable instanceof PontifexRuntimeException) {
+                        PontifexRuntimeException pontifexRuntimeException = (PontifexRuntimeException) throwable;
+                        throw pontifexRuntimeException;
+                    }
                     throw new RuntimeException(invocationTargetException);
                 }
             }

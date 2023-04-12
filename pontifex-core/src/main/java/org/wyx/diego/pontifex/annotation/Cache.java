@@ -2,6 +2,8 @@ package org.wyx.diego.pontifex.annotation;
 
 
 
+import org.wyx.diego.pontifex.cache.DefaultGetKey;
+
 import java.lang.annotation.*;
 
 import static org.wyx.diego.pontifex.cache.Target.Memory;
@@ -24,4 +26,6 @@ public @interface Cache {
     long timeout() default 300000L;
 
     long maximumSize() default -1L;
+
+    DefaultGetKey getKey() default DefaultGetKey.DEFAULT_GET_KEY;
 }

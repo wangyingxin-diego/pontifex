@@ -13,4 +13,6 @@ public interface BusinessException {
     String getMsg();
 
     ExceptionLevel getExceptionLevel();
+
+
 }

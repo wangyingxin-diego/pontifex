@@ -1,11 +1,14 @@
 package org.wyx.diego.pontifex.pipeline;
 
 
+import org.wyx.diego.pontifex.exception.BusinessException;
 import org.wyx.diego.pontifex.exception.ExceptionLevel;
 import org.wyx.diego.pontifex.exception.ExceptionType;
 import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
 
 import java.util.List;
+
+import static org.wyx.diego.pontifex.exception.PontifexRuntimeException.DEFAULT_VALUE_EXCEPTION;
 
 /**
  * @author diego
@@ -36,16 +39,24 @@ public abstract class PLTask<T extends PLContext> implements Comparable<PLTask<?
 
     public abstract int getType();
 
-    protected static void throwException(int errorCode, String userMsg) {
+    private static void throwException(int errorCode, String userMsg) {
         throw new PontifexRuntimeException(errorCode, userMsg, userMsg, ExceptionType.TASK_EXCEPTION, ExceptionLevel.EXCEPTION_MUST);
     }
 
-    protected static void throwException(int errorCode, String debugMsg, String userMsg) {
+    private static void throwException(int errorCode, String debugMsg, String userMsg) {
         throw new PontifexRuntimeException(errorCode, debugMsg, userMsg, ExceptionType.TASK_EXCEPTION, ExceptionLevel.EXCEPTION_MUST);
     }
 
-    protected static void throwException(int errorCode, String debugMsg, String userMsg, ExceptionLevel exceptionLevel) {
+    private static void throwException(int errorCode, String debugMsg, String userMsg, ExceptionLevel exceptionLevel) {
         throw new PontifexRuntimeException(errorCode, debugMsg, userMsg, ExceptionType.TASK_EXCEPTION, exceptionLevel);
+    }
+
+    protected static void throwException(BusinessException businessException) {
+        throw PontifexRuntimeException.exception(businessException);
+    }
+
+    protected static void throwDefaultValueException() {
+        throw DEFAULT_VALUE_EXCEPTION;
     }
 
     public int getSort() {

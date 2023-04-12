@@ -7,10 +7,8 @@ import org.wyx.diego.pontifex.PontifexRequest;
 import org.wyx.diego.pontifex.PontifexResponse;
 import org.wyx.diego.pontifex.exception.ExceptionCode;
 import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
-import org.wyx.diego.pontifex.holder.UnifyPipelineHolderInstance;
+import org.wyx.diego.pontifex.loader.SequencePipelineLoaderInstance;
 import org.wyx.diego.pontifex.pipeline.Pipeline;
-
-import javax.annotation.Resource;
 
 /**
  * @author diego
@@ -19,8 +17,11 @@ import javax.annotation.Resource;
  */
 public class PontifexMainFilter extends AbstractFilter {
 
-    @Resource
     private Engine engine;
+
+    public PontifexMainFilter(Engine engine) {
+        this.engine = engine;
+    }
 
     @Override
     void before(PontifexRequest pontifexRequest, PontifexResponse pontifexResponse) {
@@ -35,15 +36,16 @@ public class PontifexMainFilter extends AbstractFilter {
     @Override
     public void doFilter(PontifexRequest pontifexRequest, PontifexResponse pontifexResponse, FilterChain filterChain) {
 
-        before(pontifexRequest, pontifexResponse);
 
-        Pipeline pipeline = UnifyPipelineHolderInstance.INSTANCE.obtain(pontifexRequest);
+        Pipeline pipeline = SequencePipelineLoaderInstance.INSTANCE.getPipeline(pontifexRequest);
 
         if(pipeline == null) throw new PontifexRuntimeException(ExceptionCode.EXCEPTION_CODE_PL_INEXISTENCE);
 
+        filterChain.doBefore(pontifexRequest, pontifexResponse);
+
         engine.launch(pipeline, pontifexRequest, pontifexResponse);
 
-        after(pontifexRequest, pontifexResponse);
+        filterChain.doAfter(pontifexRequest, pontifexResponse);
 
     }
 

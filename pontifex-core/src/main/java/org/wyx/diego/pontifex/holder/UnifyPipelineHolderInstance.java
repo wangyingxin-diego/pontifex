@@ -1,7 +1,6 @@
 package org.wyx.diego.pontifex.holder;
 
 import org.wyx.diego.pontifex.PontifexRequest;
-import org.wyx.diego.pontifex.pipeline.PLTask;
 import org.wyx.diego.pontifex.pipeline.Pipeline;
 import org.wyx.diego.pontifex.pipeline.Task;
 

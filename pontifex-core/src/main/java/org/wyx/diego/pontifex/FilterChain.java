@@ -7,6 +7,8 @@ package org.wyx.diego.pontifex;
  */
 public interface FilterChain {
 
-    void doFilter(PontifexRequest pontifexRequest, PontifexResponse pontifexResponse);
+    void doBefore(PontifexRequest pontifexRequest, PontifexResponse pontifexResponse);
+
+    void doAfter(PontifexRequest pontifexRequest, PontifexResponse pontifexResponse);
 
 }
