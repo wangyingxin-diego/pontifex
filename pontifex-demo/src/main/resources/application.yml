@@ -6,6 +6,10 @@ server:
 spring:
   application:
     name: demo
+  redis:
+    host: 172.27.133.82
+    port: 6379
+    password: red1s@18m
 
 
 

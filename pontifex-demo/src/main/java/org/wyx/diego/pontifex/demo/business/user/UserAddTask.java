@@ -4,11 +4,11 @@ package org.wyx.diego.pontifex.demo.business.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wyx.diego.pontifex.annotation.TaskMeta;
-import org.wyx.diego.pontifex.component.Res1;
 import org.wyx.diego.pontifex.demo.business.component.UserComponent;
+import org.wyx.diego.pontifex.pipeline.TaskContext;
+import org.wyx.diego.pontifex.component.Res1;
 import org.wyx.diego.pontifex.pipeline.PontifexTaskSortConstant;
 import org.wyx.diego.pontifex.pipeline.Task;
-import org.wyx.diego.pontifex.pipeline.TaskContext;
 
 import static org.wyx.diego.pontifex.demo.business.user.UserTaskConstants.USER_ADD_PIPELINE;
 

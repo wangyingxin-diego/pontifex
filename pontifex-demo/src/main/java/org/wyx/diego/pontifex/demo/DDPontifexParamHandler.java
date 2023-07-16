@@ -11,7 +11,8 @@ public class DDPontifexParamHandler implements PontifexParamHandler {
     @Override
     public void handle(PontifexParam pontifexParam) {
 
-        pontifexParam.getPontifexRequest().setSecretKey("1234567890123456");
+        pontifexParam.getPontifexRequest().setDecryptSwitch(true);
+        pontifexParam.getPontifexRequest().setDecryptKey("1234567890123456");
         System.out.println(JSONObject.toJSONString(pontifexParam.getPontifexRequest()));
 
     }

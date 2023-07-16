@@ -5,12 +5,12 @@
     <parent>
         <artifactId>pontifex-parent</artifactId>
         <groupId>org.wyx.diego</groupId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>pontifex-spring-boot-starter</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.7-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -23,12 +23,23 @@
         <dependency>
             <groupId>org.wyx.diego</groupId>
             <artifactId>pontifex-core</artifactId>
+            <version>1.0.7-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <artifactId>error_prone_annotations</artifactId>
                     <groupId>com.google.errorprone</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wyx.diego</groupId>
+            <artifactId>pontifex-alarm-biz</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wyx.diego</groupId>
+            <artifactId>pontifex-client</artifactId>
+            <version>1.0.7-SNAPSHOT</version>
         </dependency>
         <!-- spring cloud -->
         <dependency>
@@ -128,6 +139,31 @@
             <artifactId>feign-core</artifactId>
             <version>11.8</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>2.6.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.19.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
 
 
     </dependencies>

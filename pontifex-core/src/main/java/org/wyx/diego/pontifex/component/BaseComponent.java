@@ -2,6 +2,8 @@ package org.wyx.diego.pontifex.component;
 
 
 import org.wyx.diego.pontifex.Component;
+import org.wyx.diego.pontifex.cache.DefaultComponentGetKey;
+import org.wyx.diego.pontifex.cache.GetKey;
 import org.wyx.diego.pontifex.exception.BusinessException;
 import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
 
@@ -16,4 +18,8 @@ public abstract class BaseComponent<P extends BaseComponentReq, R> implements Co
         throw PontifexRuntimeException.exception(businessException);
     }
 
+    @Override
+    public GetKey<ComponentReq> getKey() {
+        return DefaultComponentGetKey.DEFAULT_COMPONENT_GET_KEY;
+    }
 }

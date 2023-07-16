@@ -3,15 +3,16 @@ package org.wyx.diego.pontifex.loader.handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wyx.diego.pontifex.Component;
-import org.wyx.diego.pontifex.component.*;
+import org.wyx.diego.pontifex.exception.ExceptionCode;
 import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
-import org.wyx.diego.pontifex.loader.handler.invoke.ComponentLogInvoker;
-import org.wyx.diego.pontifex.loader.handler.invoke.Invoker;
-import org.wyx.diego.pontifex.loader.handler.invoke.InvokerContext;
-import org.wyx.diego.pontifex.loader.handler.invoke.InvokerParam;
+import org.wyx.diego.pontifex.cache.*;
+import org.wyx.diego.pontifex.component.*;
+import org.wyx.diego.pontifex.cache.*;
+import org.wyx.diego.pontifex.component.*;
+import org.wyx.diego.pontifex.loader.handler.invoke.*;
+import org.wyx.diego.pontifex.loader.handler.invoke.*;
 import org.wyx.diego.pontifex.loader.runtime.Async;
 import org.wyx.diego.pontifex.loader.runtime.ComponentRuntimeObject;
-import org.wyx.diego.pontifex.loader.runtime.RuntimeObject;
 import org.wyx.diego.pontifex.util.ThreadLocalUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,19 +24,19 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_COMPONENT_METHOD_ERROR;
-
 /**
  * @author diego
  * @time 2015-10-15
  * @description
  */
 public final class ComponentInvocationHandler extends AbstractInvocationHandler<Component, ComponentRuntimeObject> {
-    private static final Logger logger = LoggerFactory.getLogger(ComponentInvocationHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentInvocationHandler.class);
     private static final Map<Method, Component.MethodName> methodNameMap = new ConcurrentHashMap();
+    private static Method CALL;
+    private static  Method APPLY;
 
     public ComponentInvocationHandler(ComponentInvocationHandler.ComponentProxy componentProxy) {
-        super(componentProxy.componentRuntimeObject, new ComponentLogInvoker(componentProxy.asyncComponentInvoker), componentProxy.component);
+        super(componentProxy.componentRuntimeObject, new ComponentLogInvoker(new ComponentCacheInvoker(componentProxy.asyncComponentInvoker)), componentProxy.component);
     }
 
     static {
@@ -43,9 +44,12 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
         Method[] methods = Component.class.getDeclaredMethods();
         for(Method method : methods) {
             String methodName = method.getName();
-            Component.MethodName name = Component.MethodName.getByMethodName(methodName);
-            if (name != null) {
-                methodNameMap.put(method, name);
+            if(methodName.equals("call")) {
+                CALL = method;
+                continue;
+            }
+            if(methodName.equals("apply")) {
+                APPLY = method;
             }
         }
 
@@ -64,13 +68,23 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
             short concurrency = async.getConcurrency();
             this.executorService = Executors.newFixedThreadPool(concurrency, new ComponentInvocationHandler.AsyncComponentInvoker.ComponentThreadFactory(name));
             this.defaultAsync = this.componentRuntimeObject.getAsync().isOpen();
+
+            GetKey getKey = proxyed.getKey();
+            if(getKey == null) {
+                getKey = DefaultComponentGetKey.DEFAULT_COMPONENT_GET_KEY;
+            }
+            CacheBean cacheBean = componentRuntimeObject.getCache();
+            CacheKey cacheKey = new CacheKey(getKey, cacheBean);
+            CacheManager.addCacheKey(name, cacheKey);
+
         }
 
         public InvokerParam before(InvokerParam invokerParam) {
             return invokerParam;
         }
 
-        public void after(InvokerParam o) {
+        public void after(InvokerParam invokerParam) {
+
         }
 
         List<CompletableFuture> handleCall(Method method, InternalReq internalReq, Object[] args) {
@@ -221,6 +235,8 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
                         throw pontifexRuntimeException;
                     }
                     throw new RuntimeException(invocationTargetException);
+                } finally {
+                    this.after(invokerParam);
                 }
             }
             BaseComponentReq baseComponentReq = (BaseComponentReq)args[0];
@@ -236,7 +252,7 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
                     completableFutures = this.handleApply(method, internalReq, args);
                     break;
                 default:
-                    throw PontifexRuntimeException.exception(EXCEPTION_CODE_COMPONENT_METHOD_ERROR);
+                    throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_COMPONENT_METHOD_ERROR);
             }
 
             this.after(invokerParam);
@@ -244,7 +260,15 @@ public final class ComponentInvocationHandler extends AbstractInvocationHandler<
             return res;
         }
 
-        public void after(InvokerParam o) {
+        public void after(InvokerParam invokerParam) {
         }
+    }
+
+    @Override
+    boolean methodHandled(Method method) {
+        if(method.getParameterTypes().length == 1 && (method.getReturnType() == CALL.getReturnType() || method.getReturnType() == APPLY.getReturnType())) {
+            return true;
+        }
+        return false;
     }
 }

@@ -3,10 +3,10 @@ package org.wyx.diego.pontifex.loader.handler.invoke;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wyx.diego.pontifex.component.ComponentReq;
 import org.wyx.diego.pontifex.loader.runtime.ComponentRuntimeObject;
 import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 import org.wyx.diego.pontifex.pipeline.TaskContext;
+import org.wyx.diego.pontifex.component.ComponentReq;
 import org.wyx.diego.pontifex.util.ThreadLocalUtil;
 
 public class ComponentLogInvoker extends AbstractInvoker<LogInvoker.Context>  {
@@ -23,6 +23,7 @@ public class ComponentLogInvoker extends AbstractInvoker<LogInvoker.Context>  {
         long startTime = System.currentTimeMillis();
         LogInvoker.Context context = new LogInvoker.Context();
         context.setStartTime(startTime).setInvokerParam(invokerParam);
+        invokerParam.getInvokerContext().setStartTime(startTime);
         logStart(invokerParam);
         return context;
 
@@ -34,6 +35,7 @@ public class ComponentLogInvoker extends AbstractInvoker<LogInvoker.Context>  {
         InvokerParam invokerParam = context.getInvokerParam();
         ComponentRuntimeObject runtimeObject = (ComponentRuntimeObject) invokerParam.getRuntimeObject();
         long endTime = System.currentTimeMillis();
+        invokerParam.getInvokerContext().setEndTime(endTime);
         long spend = endTime - context.getStartTime();
         TaskContext taskContext = ThreadLocalUtil.get();
         LogTaskContext logTaskContext = taskContext.getLogTaskContext4Component();
@@ -71,6 +73,9 @@ public class ComponentLogInvoker extends AbstractInvoker<LogInvoker.Context>  {
 
         ComponentReq componentReq = (ComponentReq)object;
         TaskContext taskContext = invokerParam.getTaskContext();
+        if(taskContext == null) {
+            return;
+        }
         TaskRuntimeObject taskRuntimeObject = taskContext.getTaskRuntimeObject();
         ComponentRuntimeObject componentRuntimeObject = (ComponentRuntimeObject) invokerParam.getRuntimeObject();
 

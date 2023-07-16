@@ -2,9 +2,10 @@ package org.wyx.diego.pontifex.loader.runtime;
 
 
 import org.wyx.diego.pontifex.ModuleType;
-import org.wyx.diego.pontifex.annotation.Alarm;
+import org.wyx.diego.pontifex.annotation.Cache;
 import org.wyx.diego.pontifex.annotation.RuntimeMeta;
 import org.wyx.diego.pontifex.cache.CacheBean;
+import org.wyx.diego.pontifex.annotation.Alarm;
 
 import java.util.Arrays;
 import java.util.List;
@@ -50,7 +51,7 @@ public abstract class RuntimeObject {
         return Arrays.asList(alarms);
     }
 
-    protected CacheBean analysisCache(org.wyx.diego.pontifex.annotation.Cache cache) {
+    protected CacheBean analysisCache(Cache cache) {
         this.cacheBean = new CacheBean(cache);
         return this.cacheBean;
     }

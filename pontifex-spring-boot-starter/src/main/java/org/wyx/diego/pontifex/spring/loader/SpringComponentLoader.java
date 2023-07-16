@@ -2,7 +2,7 @@ package org.wyx.diego.pontifex.spring.loader;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Component;
+import org.wyx.diego.pontifex.Component;
 import org.wyx.diego.pontifex.loader.ComponentLoaderInstance;
 
 /**
@@ -18,8 +18,8 @@ public class SpringComponentLoader implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
-        if(!(bean instanceof org.wyx.diego.pontifex.Component)) return bean;
-        return ComponentLoaderInstance.INSTANCE.load((org.wyx.diego.pontifex.Component) bean);
+        if(!(bean instanceof Component)) return bean;
+        return ComponentLoaderInstance.INSTANCE.load((Component) bean);
 
     }
 

@@ -69,4 +69,20 @@ public class CacheBean {
     public Set<Target> getTargetSet() {
         return targetSet;
     }
+
+    public static boolean validCache(CacheObject cacheObject, CacheKey cacheKey) {
+
+        if(cacheObject == null || cacheObject.getCacheObject() == null) {
+            return false;
+        }
+        long updateTime = cacheObject.getUpdateTime();
+        long now = System.currentTimeMillis();
+        long d = now - updateTime;
+        long validTime = cacheKey.getCacheBean().timeout;
+        if(d > validTime) {
+            return false;
+        }
+        return true;
+
+    }
 }

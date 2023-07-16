@@ -3,7 +3,6 @@ package org.wyx.diego.pontifex.demo.business.user;
 import org.wyx.diego.pontifex.BaseRequest;
 import org.wyx.diego.pontifex.annotation.Decryption;
 
-import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class UserRequest extends BaseRequest {
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -41,7 +40,7 @@ public class UserRequest extends BaseRequest {
     }
 
     public String getAddress() {
-        return address;
+        return this.address;
     }
 
     public void setAddress(String address) {
@@ -49,7 +48,7 @@ public class UserRequest extends BaseRequest {
     }
 
     public String getDepartment() {
-        return department;
+        return this.department;
     }
 
     public UserRequest setDepartment(String department) {

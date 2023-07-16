@@ -5,11 +5,12 @@
     <parent>
         <artifactId>pontifex-parent</artifactId>
         <groupId>org.wyx.diego</groupId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.6-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>pontifex-core</artifactId>
+    <version>1.0.7-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -21,7 +22,22 @@
         <dependency>
             <groupId>org.wyx.diego</groupId>
             <artifactId>pontifex-base</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wyx.diego</groupId>
+            <artifactId>pontifex-client</artifactId>
+            <version>1.0.7-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wyx.diego</groupId>
+            <artifactId>pontifex-alarm-biz</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wyx.diego</groupId>
+            <artifactId>pontifex-flow-core</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
         </dependency>
 
         <dependency>

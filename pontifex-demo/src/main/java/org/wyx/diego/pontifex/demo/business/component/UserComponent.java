@@ -5,13 +5,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.wyx.diego.pontifex.annotation.Cache;
 import org.wyx.diego.pontifex.annotation.ComponentMeta;
-import org.wyx.diego.pontifex.cache.DefaultGetKey;
 import org.wyx.diego.pontifex.component.*;
+import org.wyx.diego.pontifex.component.BaseComponentReq;
+import org.wyx.diego.pontifex.component.Res1;
 import org.wyx.diego.pontifex.demo.business.exception.MyPontifexException;
 import org.wyx.diego.pontifex.log.ComponentLogLevel;
+import org.wyx.diego.pontifex.component.BaseComponent;
 
 @Component
-@ComponentMeta(name = "UserComponent", level = ComponentLogLevel.ALL, cache = @Cache(getKey = DefaultGetKey.DEFAULT_GET_KEY))
+@ComponentMeta(name = "UserComponent", level = ComponentLogLevel.ALL, cache = @Cache())
 public class UserComponent extends BaseComponent<UserComponent.UserComponentReq, UserComponent.UserComponentRes> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserComponent.class);
@@ -42,12 +44,6 @@ public class UserComponent extends BaseComponent<UserComponent.UserComponentReq,
     }
 
     public static class UserComponentReq extends BaseComponentReq {
-
-        @Override
-        public String getKey() {
-            return null;
-        }
-
 
         private long userId;
 

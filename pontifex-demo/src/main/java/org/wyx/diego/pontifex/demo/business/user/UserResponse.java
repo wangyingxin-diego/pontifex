@@ -2,7 +2,6 @@ package org.wyx.diego.pontifex.demo.business.user;
 
 import org.wyx.diego.pontifex.EncryptionDecryptionLabel;
 import org.wyx.diego.pontifex.Response;
-import org.wyx.diego.pontifex.annotation.Encryption;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package org.wyx.diego.pontifex.loader;
 
 import org.wyx.diego.pontifex.Loader;
-import org.wyx.diego.pontifex.pipeline.PLTask;
 import org.wyx.diego.pontifex.pipeline.Task;
 
 /**

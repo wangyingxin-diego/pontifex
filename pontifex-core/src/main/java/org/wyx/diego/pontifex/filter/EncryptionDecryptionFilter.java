@@ -3,16 +3,16 @@ package org.wyx.diego.pontifex.filter;
 import org.wyx.diego.pontifex.*;
 import org.wyx.diego.pontifex.annotation.Encryption;
 import org.wyx.diego.pontifex.annotation.EncryptionDecryptionAlgorithm;
+import org.wyx.diego.pontifex.context.PontifexContextInstance;
+import org.wyx.diego.pontifex.exception.ExceptionCode;
 import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
+import org.wyx.diego.pontifex.pipeline.PipelineInterface;
 import org.wyx.diego.pontifex.util.AESBase64Util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-
-import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_PARAM_ENCRYPTION_ERROR;
-import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_PARAM_ENCRYPTION_VALUE_ERROR;
 
 public class EncryptionDecryptionFilter extends AbstractFilter {
 
@@ -23,17 +23,24 @@ public class EncryptionDecryptionFilter extends AbstractFilter {
 
     @Override
     void before(PontifexRequest pontifexRequest, PontifexResponse pontifexResponse) {
-
-
-
     }
 
     @Override
     void after(PontifexRequest pontifexRequest, PontifexResponse pontifexResponse) {
 
+        if(!pontifexRequest.isEncryptSwitch()) {
+            return;
+        }
+        PipelineInterface pipelineInterface = PontifexContextInstance.INSTANCE.getPontifexContext().getPipelineContext().getPipelineManager().getPipelineInterface(pontifexRequest.getBizKey());
+        if(pipelineInterface.isEncryptSwitch()) {
+            return;
+        }
+
         Object object = pontifexResponse.getResult();
-        String secretKey = pontifexRequest.getSecretKey();
+        String secretKey = getSecretKey(pontifexRequest);
+
         if (object == null) {
+            return;
         }
         if(object instanceof ListRes) {
             handleListRes((ListRes) object, secretKey);
@@ -46,6 +53,22 @@ public class EncryptionDecryptionFilter extends AbstractFilter {
         }
 
         handleObject(object, secretKey);
+
+    }
+
+    private String getSecretKey(PontifexRequest pontifexRequest) {
+
+        String encryptKey = pontifexRequest.getEncryptKey();
+        PipelineInterface pipelineInterface = PontifexContextInstance.INSTANCE.getPontifexContext().getPipelineContext().getPipelineManager().getPipelineInterface(pontifexRequest.getBizKey());
+        String key = null;
+        if(pipelineInterface != null) {
+            key = pipelineInterface.getEncryptKey();
+        }
+        if(key != null && "".equals(key.trim())) {
+            encryptKey = pipelineInterface.getDecryptKey();
+        }
+
+        return encryptKey;
 
     }
 
@@ -85,13 +108,18 @@ public class EncryptionDecryptionFilter extends AbstractFilter {
                 continue;
             }
             Class<?> cla = field.getType();
+            Encryption encryption = encryptions[0];
+            String key = encryption.key();
+            if(key != null && "".equals(key.trim())) {
+                secretKey = key;
+            }
             if(cla == String.class) {
-                handleString(field, clazz, encryptions[0], object, secretKey);
+                handleString(field, clazz, encryption, object, secretKey);
                 continue;
             }
 
             if(EncryptionDecryptionLabel.class.isAssignableFrom(cla)) {
-                handleEncryptionDecryptionLabel(field, clazz, encryptions[0], object, secretKey);
+                handleEncryptionDecryptionLabel(field, clazz, encryption, object, secretKey);
                 continue;
             }
             if(cla == List.class) {
@@ -118,7 +146,7 @@ public class EncryptionDecryptionFilter extends AbstractFilter {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (ClassCastException e) {
-            throw PontifexRuntimeException.exception(EXCEPTION_CODE_PARAM_ENCRYPTION_ERROR);
+            throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_PARAM_ENCRYPTION_ERROR);
         }
         if(encryptionValue == null) {
             return;
@@ -145,7 +173,7 @@ public class EncryptionDecryptionFilter extends AbstractFilter {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (ClassCastException e) {
-            throw PontifexRuntimeException.exception(EXCEPTION_CODE_PARAM_ENCRYPTION_ERROR);
+            throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_PARAM_ENCRYPTION_ERROR);
         }
 
         handleObject(encryptionValue, secretKey);
@@ -168,10 +196,10 @@ public class EncryptionDecryptionFilter extends AbstractFilter {
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (ClassCastException e) {
-            throw PontifexRuntimeException.exception(EXCEPTION_CODE_PARAM_ENCRYPTION_ERROR);
+            throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_PARAM_ENCRYPTION_ERROR);
         }
         if(encryptionValue == null) {
-            throw PontifexRuntimeException.exception(EXCEPTION_CODE_PARAM_ENCRYPTION_VALUE_ERROR);
+            throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_PARAM_ENCRYPTION_VALUE_ERROR);
         }
         encryptionParam(field, encryption, encryptionValue, clazz, object, secretKey);
 

@@ -7,7 +7,7 @@
     <groupId>org.wyx.diego</groupId>
     <artifactId>pontifex-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.6-SNAPSHOT</version>
 
     <modules>
         <module>pontifex-core</module>
@@ -16,6 +16,12 @@
         <module>pontifex-demo</module>
         <module>pontifex-alarm</module>
         <module>pontifex-base</module>
+        <module>pontifex-alarm/pontifex-alarm-app</module>
+        <module>pontifex-alarm/pontifex-alarm-biz</module>
+        <module>pontifex-client</module>
+        <module>pontifex-flow</module>
+        <module>pontifex-flow/pontifex-flow-sentinel</module>
+        <module>pontifex-flow/pontifex-flow-core</module>
     </modules>
     <properties>
         <app.name>${project.artifactId}</app.name>
@@ -39,18 +45,23 @@
             <dependency>
                 <groupId>org.wyx.diego</groupId>
                 <artifactId>pontifex-base</artifactId>
-                <version>1.0.3-SNAPSHOT</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.wyx.diego</groupId>
                 <artifactId>pontifex-core</artifactId>
-                <version>1.0.3-SNAPSHOT</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.wyx.diego</groupId>
                 <artifactId>pontifex-spring-boot-starter</artifactId>
-                <version>1.0.3-SNAPSHOT</version>
+                <version>1.0.6-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wyx.diego</groupId>
+                <artifactId>pontifex-client</artifactId>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <dependency>
@@ -109,6 +120,14 @@
                 <artifactId>caffeine</artifactId>
                 <version>3.1.2</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>4.10.0</version>
+            </dependency>
+
 
 
         </dependencies>

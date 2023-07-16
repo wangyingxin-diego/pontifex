@@ -1,7 +1,5 @@
 package org.wyx.diego.pontifex.pipeline;
 
-import java.util.List;
-
 /**
  * @author diego
  * @time 2016-03-11

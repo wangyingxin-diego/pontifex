@@ -1,10 +1,10 @@
 package org.wyx.diego.pontifex.loader.runtime;
 
 import org.wyx.diego.pontifex.Component;
-import org.wyx.diego.pontifex.ModuleType;
 import org.wyx.diego.pontifex.annotation.ComponentMeta;
 import org.wyx.diego.pontifex.annotation.RuntimeMeta;
 import org.wyx.diego.pontifex.log.ComponentLogLevel;
+import org.wyx.diego.pontifex.ModuleType;
 
 /**
  * @author wangyingxin

@@ -9,8 +9,8 @@ package org.wyx.diego.pontifex.cache;
  */
 public interface CacheHolder {
 
-    Object get(String key);
+    Object get(CacheKey cacheKey, Key key);
 
-    void put(String key, Object value);
+    void put(CacheKey cacheKey, Key key, Object value);
 
 }

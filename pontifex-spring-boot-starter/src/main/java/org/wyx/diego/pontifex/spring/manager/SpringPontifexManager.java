@@ -1,10 +1,10 @@
 package org.wyx.diego.pontifex.spring.manager;
 
 import org.springframework.stereotype.Component;
+import org.wyx.diego.pontifex.manager.DefaultPontifexManagerInstance;
 import org.wyx.diego.pontifex.IPontifexManager;
 import org.wyx.diego.pontifex.PontifexRequest;
 import org.wyx.diego.pontifex.PontifexResponse;
-import org.wyx.diego.pontifex.manager.DefaultPontifexManagerInstance;
 
 /**
  * @author wangyingxin

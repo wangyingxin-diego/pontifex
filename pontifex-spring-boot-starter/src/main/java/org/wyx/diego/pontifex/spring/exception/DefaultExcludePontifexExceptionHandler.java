@@ -10,7 +10,7 @@ public class DefaultExcludePontifexExceptionHandler implements ExcludePontifexEx
     public Object handler(Exception exception) {
 
         PontifexResponse pontifexResponse = new PontifexResponse();
-        pontifexResponse.getMeta().setCode(InnerBusinessException.INNER_BUSINESS_EXCEPTION__SERVICE_ERROR.getCode()).setMessage(InnerBusinessException.INNER_BUSINESS_EXCEPTION__SERVICE_ERROR.getMsg());
+        pontifexResponse.getMeta().setCode(InnerBusinessException.INNER_BUSINESS_EXCEPTION_SERVICE_ERROR.getCode()).setMessage(InnerBusinessException.INNER_BUSINESS_EXCEPTION_SERVICE_ERROR.getMsg());
         pontifexResponse.setResult(DefaultFailResponse.DEFAULT_FAIL_RESPONSE.getDefaultFailResponseVal());
         return pontifexResponse;
     }

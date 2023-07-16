@@ -2,12 +2,9 @@ package org.wyx.diego.pontifex.loader;
 
 import org.wyx.diego.pontifex.Component;
 import org.wyx.diego.pontifex.Loader;
-import org.wyx.diego.pontifex.ModuleType;
 import org.wyx.diego.pontifex.annotation.ComponentMeta;
-import org.wyx.diego.pontifex.annotation.RuntimeMeta;
 import org.wyx.diego.pontifex.bytecode.NebulaJavassistProxy;
 import org.wyx.diego.pontifex.loader.handler.ComponentInvocationHandler;
-import org.wyx.diego.pontifex.loader.runtime.RuntimeObject;
 
 /**
  * @author wangyingxin
@@ -16,7 +13,7 @@ import org.wyx.diego.pontifex.loader.runtime.RuntimeObject;
  * @description: TODO
  * @date 2015/12/29
  */
-public enum ComponentLoaderInstance implements Loader<Component, Component>  {
+public enum ComponentLoaderInstance implements Loader<Component, Component> {
 
     INSTANCE(new BaseComponentLoader());
 

@@ -4,9 +4,9 @@ import org.springframework.stereotype.Component;
 import org.wyx.diego.pontifex.annotation.TaskMeta;
 import org.wyx.diego.pontifex.exception.BusinessException;
 import org.wyx.diego.pontifex.exception.ExceptionLevel;
+import org.wyx.diego.pontifex.pipeline.TaskContext;
 import org.wyx.diego.pontifex.pipeline.PontifexTaskSortConstant;
 import org.wyx.diego.pontifex.pipeline.Task;
-import org.wyx.diego.pontifex.pipeline.TaskContext;
 
 import java.util.ArrayList;
 import java.util.List;

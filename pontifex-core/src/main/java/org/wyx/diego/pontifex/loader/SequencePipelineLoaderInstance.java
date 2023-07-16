@@ -2,12 +2,12 @@ package org.wyx.diego.pontifex.loader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wyx.diego.pontifex.PontifexRequest;
 import org.wyx.diego.pontifex.annotation.RuntimeMeta;
 import org.wyx.diego.pontifex.annotation.TaskMeta;
+import org.wyx.diego.pontifex.pipeline.Pipeline;
+import org.wyx.diego.pontifex.PontifexRequest;
 import org.wyx.diego.pontifex.holder.UnifyPipelineHolderInstance;
 import org.wyx.diego.pontifex.pipeline.PLTask;
-import org.wyx.diego.pontifex.pipeline.Pipeline;
 import org.wyx.diego.pontifex.pipeline.Task;
 
 /**

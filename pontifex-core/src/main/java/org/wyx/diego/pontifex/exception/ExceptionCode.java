@@ -8,13 +8,14 @@ package org.wyx.diego.pontifex.exception;
 public enum ExceptionCode {
 
 
-    EXCEPTION_CODE_DEFAULT_VALUE(0, "", ExceptionType.BUSINESS_EXCEPTION, ExceptionLevel.EXCEPTION_DEFAULT_VALUE),
+    EXCEPTION_CODE_DEFAULT_VALUE(0, "success", ExceptionType.BUSINESS_EXCEPTION, ExceptionLevel.EXCEPTION_DEFAULT_VALUE),
     EXCEPTION_CODE_BUSINESS_ERROR(500, "business error", ExceptionType.BUSINESS_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
 
     EXCEPTION_CODE_PL_TYPE(11, "pipeline type error", ExceptionType.PONTIFEX_EXCETION, ExceptionLevel.EXCEPTION_MUST),
     EXCEPTION_CODE_PL_LOAD_ERROR(100, "pipeline load error", ExceptionType.PONTIFEX_EXCETION, ExceptionLevel.EXCEPTION_MUST),
     EXCEPTION_CODE_PL_NAME_NULL(101, "pipeline name can not null or null character string", ExceptionType.PONTIFEX_EXCETION, ExceptionLevel.EXCEPTION_MUST),
     EXCEPTION_CODE_PL_INEXISTENCE(102, "pipeline inexistence", ExceptionType.PONTIFEX_EXCETION, ExceptionLevel.EXCEPTION_MUST),
+    EXCEPTION_CODE_PL_META_REPETITION(103, "pipelineInterface repetition", ExceptionType.PONTIFEX_EXCETION, ExceptionLevel.EXCEPTION_MUST),
 
     EXCEPTION_CODE_TASK(1000, "task exception", ExceptionType.TASK_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
     EXCEPTION_CODE_TASK_ANNO_NULL(1001, "task annotation is null", ExceptionType.TASK_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
@@ -29,6 +30,11 @@ public enum ExceptionCode {
 
     EXCEPTION_CODE_PARAM_ENCRYPTION_VALUE_ERROR(90002, "param encryt value is null", ExceptionType.BUSINESS_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
 
+    EXCEPTION_CODE_PARAM_DECRYPT_ERROR(90003, "param decrypt error, key error", ExceptionType.BUSINESS_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
+
+    EXCEPTION_CODE_PARAM_ALGORITHM_ERROR(90004, "param decrypt error, not support algorithm", ExceptionType.BUSINESS_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
+
+    EXCEPTION_CODE_LOAD_CACHE_KEY_REPETITION(80001, "cache key repetition", ExceptionType.LOAD_EXCEPTION, ExceptionLevel.EXCEPTION_MUST),
     ;
 
     private int code;

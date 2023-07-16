@@ -11,6 +11,10 @@ public class InvokerContext {
     private long endTime;
     private boolean sync = false;
 
+    private boolean pass = false;
+
+    private Object result = null;
+
     public InvokerContext() {
     }
 
@@ -38,6 +42,24 @@ public class InvokerContext {
 
     public InvokerContext setSync(boolean sync) {
         this.sync = sync;
+        return this;
+    }
+
+    public boolean isPass() {
+        return pass;
+    }
+
+    public InvokerContext setPass(boolean pass) {
+        this.pass = pass;
+        return this;
+    }
+
+    public Object getResult() {
+        return result;
+    }
+
+    public InvokerContext setResult(Object result) {
+        this.result = result;
         return this;
     }
 }

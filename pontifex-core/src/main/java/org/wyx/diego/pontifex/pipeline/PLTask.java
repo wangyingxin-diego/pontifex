@@ -3,12 +3,8 @@ package org.wyx.diego.pontifex.pipeline;
 
 import org.wyx.diego.pontifex.exception.BusinessException;
 import org.wyx.diego.pontifex.exception.ExceptionLevel;
-import org.wyx.diego.pontifex.exception.ExceptionType;
 import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
-
-import java.util.List;
-
-import static org.wyx.diego.pontifex.exception.PontifexRuntimeException.DEFAULT_VALUE_EXCEPTION;
+import org.wyx.diego.pontifex.exception.ExceptionType;
 
 /**
  * @author diego
@@ -56,7 +52,7 @@ public abstract class PLTask<T extends PLContext> implements Comparable<PLTask<?
     }
 
     protected static void throwDefaultValueException() {
-        throw DEFAULT_VALUE_EXCEPTION;
+        throw PontifexRuntimeException.DEFAULT_VALUE_EXCEPTION;
     }
 
     public int getSort() {

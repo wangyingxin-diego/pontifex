@@ -2,17 +2,19 @@ package org.wyx.diego.pontifex.loader.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wyx.diego.pontifex.loader.handler.invoke.Invoker;
 import org.wyx.diego.pontifex.loader.handler.invoke.InvokerParam;
-import org.wyx.diego.pontifex.loader.handler.invoke.TaskLogInvoker;
 import org.wyx.diego.pontifex.loader.handler.invoke.TaskPreInvoker;
+import org.wyx.diego.pontifex.pipeline.TaskContext;
+import org.wyx.diego.pontifex.loader.handler.invoke.Invoker;
+import org.wyx.diego.pontifex.loader.handler.invoke.TaskLogInvoker;
 import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 import org.wyx.diego.pontifex.pipeline.PLTask;
 import org.wyx.diego.pontifex.pipeline.Task;
-import org.wyx.diego.pontifex.pipeline.TaskContext;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author diego
@@ -22,9 +24,21 @@ import java.lang.reflect.Method;
 public class TaskInvocationHandler extends AbstractInvocationHandler<PLTask, TaskRuntimeObject> {
 
 private static final Logger logger = LoggerFactory.getLogger(TaskInvocationHandler.class);
+private static final Map<Method, Boolean> methodNameMap = new ConcurrentHashMap<>();
+private static Method METHOD;
 
 public TaskInvocationHandler(Task proxyed, TaskRuntimeObject runtimeObject) {
         super(runtimeObject, new TaskPreInvoker(new TaskLogInvoker(new TaskInvocationHandler.TaskInvoker(proxyed))), proxyed);
+}
+
+static {
+    Method[] methods = PLTask.class.getDeclaredMethods();
+    for(Method method : methods) {
+        String methodName = method.getName();
+        if (methodName == "run") {
+            METHOD = method;
+        }
+    }
 }
 
 private static class TaskInvoker implements Invoker {
@@ -67,4 +81,12 @@ private static class TaskInvoker implements Invoker {
     public void after(Object o) {
     }
 }
+
+    @Override
+    boolean methodHandled(Method method) {
+        if(method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == METHOD.getParameterTypes()[0]) {
+            return true;
+        }
+        return false;
+    }
 }

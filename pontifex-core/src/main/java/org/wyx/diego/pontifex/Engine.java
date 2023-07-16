@@ -10,6 +10,6 @@ import org.wyx.diego.pontifex.pipeline.Pipeline;
  */
 public interface Engine {
 
-    void launch(Pipeline pipeline, PontifexRequest pontifexRequest, org.wyx.diego.pontifex.PontifexResponse pontifexResponse);
+    void launch(Pipeline pipeline, PontifexRequest pontifexRequest, PontifexResponse pontifexResponse);
 
 }

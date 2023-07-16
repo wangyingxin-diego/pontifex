@@ -2,7 +2,6 @@ package org.wyx.diego.pontifex.spring.annotation;
 
 import org.springframework.stereotype.Component;
 import org.wyx.diego.pontifex.annotation.ComponentMeta;
-import org.wyx.diego.pontifex.annotation.ComponentMetas;
 
 import java.lang.annotation.*;
 

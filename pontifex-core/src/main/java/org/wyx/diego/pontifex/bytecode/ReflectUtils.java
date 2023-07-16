@@ -7,12 +7,11 @@ import javassist.NotFoundException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author diego
@@ -282,6 +281,20 @@ public class ReflectUtils {
                 getAllInterfaces(interfaceCls, superClazzList);
             }
         }
+    }
+
+    public static List<Method> getMethods(Class<?> clazz) {
+
+        Method[] methods;
+        List<Method> methodList = new ArrayList<>();
+        while (clazz != Object.class) {
+            methods = clazz.getDeclaredMethods();
+            methodList.addAll(Arrays.stream(methods).collect(Collectors.toList()));
+            clazz = clazz.getSuperclass();
+        }
+
+        return methodList;
+
     }
 
     private ReflectUtils() {

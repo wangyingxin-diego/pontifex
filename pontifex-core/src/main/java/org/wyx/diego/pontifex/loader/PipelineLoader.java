@@ -2,8 +2,8 @@ package org.wyx.diego.pontifex.loader;
 
 
 import org.wyx.diego.pontifex.Loader;
-import org.wyx.diego.pontifex.PontifexRequest;
 import org.wyx.diego.pontifex.pipeline.Pipeline;
+import org.wyx.diego.pontifex.PontifexRequest;
 
 /**
  * @author diego

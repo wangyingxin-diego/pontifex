@@ -4,11 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Component;
-import org.wyx.diego.pontifex.annotation.TaskMeta;
 import org.wyx.diego.pontifex.loader.UnifyPipelineLoaderInstance;
 import org.wyx.diego.pontifex.pipeline.Task;
-import org.wyx.diego.pontifex.spring.annotation.TaskSpring;
 
 //@Component
 public class SpringSequencePipelineLoader implements BeanPostProcessor {

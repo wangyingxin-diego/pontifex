@@ -1,18 +1,16 @@
 package org.wyx.diego.pontifex.pipeline;
 
+import org.wyx.diego.pontifex.exception.ExceptionCode;
+import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
+import org.wyx.diego.pontifex.loader.handler.invoke.LogTaskContext;
 import org.wyx.diego.pontifex.ListRes;
 import org.wyx.diego.pontifex.MapRes;
 import org.wyx.diego.pontifex.Response;
-import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
-import org.wyx.diego.pontifex.loader.handler.invoke.LogTaskContext;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Consumer;
-
-import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_TASK;
-import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_TASK_GENERIC_ERROR;
 
 /**
  * @author diego
@@ -85,7 +83,8 @@ public class SequencePipeline extends AbstractPipeline implements Iterable<PLTas
 
         if(created) return created;
         created = true;
-        ParameterizedType parameterizedType = (ParameterizedType)task.getPlTask().getClass().getSuperclass().getGenericSuperclass();
+        ParameterizedType parameterizedType = getParameterizedType(task);
+
         Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
         Type payloadType = actualTypeArguments[1];
         Class payloadClazz = (Class)payloadType;
@@ -95,7 +94,7 @@ public class SequencePipeline extends AbstractPipeline implements Iterable<PLTas
             ctx.setPayload(payload);
         } catch (Exception e) {
             e.printStackTrace();
-            throw PontifexRuntimeException.exception(EXCEPTION_CODE_TASK_GENERIC_ERROR);
+            throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_TASK_GENERIC_ERROR);
         }
 
         Type actualTypeArgument = actualTypeArguments[actualTypeArguments.length - 1];
@@ -107,7 +106,7 @@ public class SequencePipeline extends AbstractPipeline implements Iterable<PLTas
                 ctx.putPontifexResult(response);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw PontifexRuntimeException.exception(EXCEPTION_CODE_TASK_GENERIC_ERROR);
+                throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_TASK_GENERIC_ERROR);
             }
         } else if (actualTypeArgument instanceof ParameterizedType) {
             ParameterizedType parameterizedTypeT = (ParameterizedType)actualTypeArgument;
@@ -123,6 +122,31 @@ public class SequencePipeline extends AbstractPipeline implements Iterable<PLTas
         return created;
     }
 
+    private static ParameterizedType getParameterizedType(ProxyedTask task) {
+
+        Class<?> clazz = task.getPlTask().getClass().getSuperclass();
+        ParameterizedType parameterizedType2 = null;
+        while(clazz != null && clazz != Object.class) {
+
+            Type type = clazz.getGenericSuperclass();
+            if(!(type instanceof ParameterizedType)) {
+                clazz = clazz.getSuperclass();
+                continue;
+            }
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            if(actualTypeArguments.length != 3 || !(Payload.class.isAssignableFrom((Class<?>) actualTypeArguments[1]))) {
+                clazz = clazz.getSuperclass();
+                continue;
+            }
+            parameterizedType2 = parameterizedType;
+            break;
+
+        }
+        return parameterizedType2;
+
+    }
+
     @Override
     public int taskSize() {
         return posts.size();
@@ -131,7 +155,7 @@ public class SequencePipeline extends AbstractPipeline implements Iterable<PLTas
 
     @Override
     public int taskIndex(String taskName) {
-        if(taskName == null || "".equals(taskName.trim())) throw PontifexRuntimeException.exception(EXCEPTION_CODE_TASK);
+        if(taskName == null || "".equals(taskName.trim())) throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_TASK);
         int index = 0;
         for(PLTask plTask : posts) {
 

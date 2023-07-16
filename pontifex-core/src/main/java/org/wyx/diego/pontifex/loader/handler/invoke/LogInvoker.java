@@ -3,11 +3,11 @@ package org.wyx.diego.pontifex.loader.handler.invoke;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wyx.diego.pontifex.pipeline.TaskContext;
 import org.wyx.diego.pontifex.ModuleType;
 import org.wyx.diego.pontifex.component.ComponentReq;
 import org.wyx.diego.pontifex.loader.runtime.RuntimeObject;
 import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
-import org.wyx.diego.pontifex.pipeline.TaskContext;
 import org.wyx.diego.pontifex.util.ThreadLocalUtil;
 
 /**

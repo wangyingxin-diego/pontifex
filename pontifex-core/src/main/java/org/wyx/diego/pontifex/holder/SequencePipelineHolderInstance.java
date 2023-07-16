@@ -3,19 +3,17 @@ package org.wyx.diego.pontifex.holder;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wyx.diego.pontifex.PontifexRequest;
 import org.wyx.diego.pontifex.annotation.RuntimeMeta;
 import org.wyx.diego.pontifex.annotation.TaskMeta;
 import org.wyx.diego.pontifex.bytecode.NebulaJavassistProxy;
 import org.wyx.diego.pontifex.exception.ExceptionCode;
-import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
 import org.wyx.diego.pontifex.loader.handler.TaskInvocationHandler;
-import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 import org.wyx.diego.pontifex.pipeline.*;
+import org.wyx.diego.pontifex.PontifexRequest;
+import org.wyx.diego.pontifex.exception.PontifexRuntimeException;
+import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 
 import java.util.Iterator;
-
-import static org.wyx.diego.pontifex.exception.ExceptionCode.EXCEPTION_CODE_PL_TYPE;
 
 /**
  * @author wangyingxin
@@ -77,6 +75,8 @@ public enum SequencePipelineHolderInstance implements PipelineHolder {
 
             }
 
+
+
             return task;
 
         }
@@ -99,7 +99,7 @@ public enum SequencePipelineHolderInstance implements PipelineHolder {
                 Pipeline pipeline =new SequencePipeline();
                 Pipeline pipelined = pipelines.putIfAbsent(pipelineName, pipeline);
                 if(pipelined != null && !(pipelined instanceof SequencePipeline)) {
-                    throw PontifexRuntimeException.exception(EXCEPTION_CODE_PL_TYPE);
+                    throw PontifexRuntimeException.exception(ExceptionCode.EXCEPTION_CODE_PL_TYPE);
                 }
                 pipelined = pipelines.get(pipelineName);
                 pipelined.addTask(task);
@@ -115,6 +115,12 @@ public enum SequencePipelineHolderInstance implements PipelineHolder {
             } catch (Exception e) {
                 throw new PontifexRuntimeException(111, "", e);
             }
+        }
+
+        private void handlePipelineMeta() {
+
+
+
         }
 
         private static class TaskParam {

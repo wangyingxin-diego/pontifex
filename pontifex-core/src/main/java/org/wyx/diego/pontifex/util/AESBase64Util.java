@@ -47,12 +47,10 @@ public class AESBase64Util {
                 String originalString = new String(original,"utf-8");
                 return originalString;
             } catch (Exception e) {
-                System.out.println(e.toString());
-                return null;
+                throw e;
             }
         } catch (Exception ex) {
-            System.out.println(ex.toString());
-            return null;
+            throw ex;
         }
     }
 

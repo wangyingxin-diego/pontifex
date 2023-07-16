@@ -6,8 +6,6 @@ import org.wyx.diego.pontifex.Response;
 import org.wyx.diego.pontifex.loader.handler.invoke.LogTaskContext;
 import org.wyx.diego.pontifex.loader.runtime.TaskRuntimeObject;
 
-import java.io.Serializable;
-
 /**
  * @author diego
  * @time 2015-07-11
