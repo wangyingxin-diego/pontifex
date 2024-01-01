@@ -1,4 +1,4 @@
-package org.wyx.diego.pontifex;
+package org.wyx.diego;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
